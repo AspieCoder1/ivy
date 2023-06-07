@@ -14,6 +14,11 @@ from ivy_tests.test_ivy.test_functional.test_core.test_linalg import (
 )
 
 
+from ivy_tests.test_ivy.test_functional.test_experimental.test_core.test_statistical import (  # noqa: E501
+    _histogram_helper,
+)
+
+
 # helpers
 @st.composite
 def _get_repeat_interleaves_args(
@@ -1356,4 +1361,43 @@ def test_torch_clone(
         fn_tree=fn_tree,
         on_device=on_device,
         input=x[0],
+    )
+
+
+@handle_frontend_test(
+    fn_tree="torch.histogram",
+    values=_histogram_helper(),
+)
+def test_torch_histogram(
+    *,
+    values,
+    on_device,
+    fn_tree,
+    frontend,
+    test_flags,
+):
+    (
+        a,
+        bins,
+        axis,
+        extend_lower_interval,
+        extend_upper_interval,
+        dtype,
+        range,
+        weights,
+        density,
+        dtype_input,
+    ) = values
+
+    helpers.test_frontend_function(
+        input_dtypes=[dtype_input],
+        test_flags=test_flags,
+        fn_tree=fn_tree,
+        on_device=on_device,
+        frontend=frontend,
+        input=a,
+        bins=bins,
+        range=range,
+        weight=weights,
+        density=density,
     )
