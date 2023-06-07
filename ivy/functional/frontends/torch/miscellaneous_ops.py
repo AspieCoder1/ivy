@@ -387,3 +387,10 @@ def diag(input, diagonal=0, *, out=None):
 @to_ivy_arrays_and_back
 def clone(input):
     return ivy.copy_array(input)
+
+
+@to_ivy_arrays_and_back
+def histogram(input, bins, *, range=None, weight=None, density=False, out=None):
+    return ivy.histogram(
+        input, bins=bins, range=range, weights=weight, density=density, out=out
+    )
